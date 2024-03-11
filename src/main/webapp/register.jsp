@@ -1,0 +1,34 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page import="com.oms.webda2.model.User" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/form.css">
+    <title>Register</title>
+</head>
+<body>
+    <%-- REGISTRATION FORM --%>
+    <form id="form-container" action="${pageContext.request.contextPath}/registration" method="post">
+        <label for="firstName"></label>
+        <input type="text" id="firstName" name="firstName" placeholder="First name" required>
+        <label for="lastName"></label>
+        <input type="text" id="lastName" name="lastName" placeholder="Last name" required>
+        <label for="address"></label>
+        <input type="text" id="address" name="address" placeholder="Address" required>
+        <label for="city"></label>
+        <input type="text" id="city" name="city" placeholder="City" required>
+        <label for="province"></label>
+        <input type="text" id="province" name="province" placeholder="Province" required>
+        <label for="postalCode"></label>
+        <input type="text" id="postalCode" name="postalCode" placeholder="Postal code" required>
+        <label for="email"></label>
+        <input type="text" id="email" name="email" placeholder="Email" required>
+        <label for="password"></label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
