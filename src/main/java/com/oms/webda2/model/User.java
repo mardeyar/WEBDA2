@@ -4,28 +4,24 @@ public class User {
     private int userId;
     private String firstName;
     private String lastName;
-    private int civicNum;
-    private String streetName;
+    private String address;
     private String city;
     private String province;
     private String postalCode;
-    private String userName;
-    private String password;
     private String email;
+    private String password;
 
     public User() {}
-    public User(int userId, String firstName, String lastName, int civicNum, String streetName, String city, String province, String postalCode, String userName, String password, String email) {
+    public User(int userId, String firstName, String lastName, String address, String city, String province, String postalCode, String email, String password) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.civicNum = civicNum;
-        this.streetName = streetName;
+        this.address = address;
         this.city = city;
         this.province = province;
         this.postalCode = postalCode;
-        this.userName = userName;
-        this.password = password;
         this.email = email;
+        this.password = password;
     }
 
     public int getUserId() {
@@ -52,20 +48,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public int getCivicNum() {
-        return civicNum;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCivicNum(int civicNum) {
-        this.civicNum = civicNum;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCity() {
@@ -90,14 +78,6 @@ public class User {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPassword() {
