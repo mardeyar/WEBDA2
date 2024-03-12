@@ -6,17 +6,17 @@ public class Product {
     private String productCategory;
     private String productInfo;
     private int quantityInStock;
-    private int reviewId;
+    private String productImage;
 
     public Product() { }
 
-    public Product(int productId, String productName, String productCategory, String productInfo, int quantityInStock, int reviewId) {
+    public Product(int productId, String productName, String productCategory, String productInfo, int quantityInStock, String productImage) {
         this.productId = productId;
         this.productName = productName;
         this.productCategory = productCategory;
         this.productInfo = productInfo;
         this.quantityInStock = quantityInStock;
-        this.reviewId = reviewId;
+        this.productImage = productImage;
     }
 
     public int getProductId() {
@@ -59,11 +59,11 @@ public class Product {
         this.quantityInStock = quantityInStock;
     }
 
-    public int getReviewId() {
-        return reviewId;
+    public String getProductImage() {
+        return productImage;
     }
 
-    public void setReviewId(int reviewId) {
-        this.reviewId = reviewId;
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 }
