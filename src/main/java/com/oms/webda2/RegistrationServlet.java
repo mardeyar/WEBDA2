@@ -37,13 +37,10 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String path = request.getServletPath();
-        switch (path) {
-            case "/registration":
-                registerUser(request, response);
-                break;
-            default:
-                response.sendRedirect("index.jsp");
-                break;
+        if (path.equals("/registration")) {
+            registerUser(request, response);
+        } else {
+            response.sendRedirect("index.jsp");
         }
     }
 
