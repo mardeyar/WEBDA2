@@ -6,6 +6,7 @@ import static com.oms.webda2.database.SQLConnection.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class UserController implements UserDAO {
     private static final String INSERT = "INSERT INTO users(first_name, last_name, address, city, province, postal_code, email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE users SET ?=? WHERE user_id = ?";
     private static final String DELETE = "DELETE FROM users WHERE user_id = ?";
+    private static final String LOGIN = "SELECT email FROM users WHERE email = ? AND password = ?";
     private static final String SELECT = "SELECT * FROM users";
 
     // Methods from UserDAO
@@ -67,6 +69,29 @@ public class UserController implements UserDAO {
             throw new RuntimeException(e);
         } finally {
             preparedStatement.close();
+            connection.close();
+        }
+    }
+
+    @Override
+    public boolean login(String email, String password) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+
+        try {
+            connection = getConnection();
+            stmt = connection.prepareStatement(LOGIN);
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            stmt.close();
             connection.close();
         }
     }
