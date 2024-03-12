@@ -6,7 +6,7 @@ import com.oms.webda2.model.Product;
 import java.sql.SQLException;
 
 public class ProductController implements ProductDAO {
-    private static final String INSERT = "INSERT INTO products(product_name, product_category, product_info, quantity_in_stock, review_id) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO products(product_name, product_category, product_info, quantity_in_stock, product_image) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE products SET ? = ? WHERE ? = ?";
     private static final String DELETE = "DELETE FROM products WHERE product_id = ?";
     private static final String SELECT = "SELECT * FROM products";
