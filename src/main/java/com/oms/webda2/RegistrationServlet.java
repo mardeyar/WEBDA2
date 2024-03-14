@@ -1,5 +1,7 @@
 package com.oms.webda2;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.oms.webda2.DAO.UserDAO;
 import com.oms.webda2.controller.UserController;
 import com.oms.webda2.model.User;
@@ -55,6 +57,9 @@ public class RegistrationServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
+            // Hash password before sending to the DB
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
             User newUser = new User();
             newUser.setFirstName(firstName);
             newUser.setLastName(lastName);
@@ -63,7 +68,7 @@ public class RegistrationServlet extends HttpServlet {
             newUser.setProvince(province);
             newUser.setPostalCode(postalCode);
             newUser.setEmail(email);
-            newUser.setPassword(password);
+            newUser.setPassword(hashedPassword);
 
             user.insert(newUser);
         } catch (SQLException e) {

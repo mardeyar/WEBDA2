@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -49,14 +51,29 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
-            boolean isValid = user.login(email, password);
-            if (isValid) {
-                response.sendRedirect("homepage.jsp");
-            } else {
-                response.sendRedirect("index.jsp");
+            User loggedInUser = user.getUserSessionInfo(email);
+
+            if (loggedInUser != null && BCrypt.checkpw(password, loggedInUser.getPassword())) {
+                // Passwords & email match: allow session to start
+                HttpSession session = request.getSession();
+                session.setAttribute("user", loggedInUser);
+
+                // This block of code will handle dynamic redirects for when user is confirmed logged in
+                String redirectURL = request.getParameter("redirect");
+
+                if (redirectURL !=null && !redirectURL.isEmpty()) {
+                    response.sendRedirect(redirectURL);
+                } else {
+                    // If no specific redirectURL, redirect to homepage
+                    response.sendRedirect("homepage.jsp");
+                }
+                return;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        // Lastly, if login fails, redirect to index
+        response.sendRedirect("index.jsp");
     }
 }
