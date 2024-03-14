@@ -1,6 +1,7 @@
 package com.oms.webda2.controller;
 
 import com.oms.webda2.DAO.UserDAO;
+import com.oms.webda2.database.SQLConnection;
 import com.oms.webda2.model.User;
 import static com.oms.webda2.database.SQLConnection.*;
 
@@ -16,6 +17,7 @@ public class UserController implements UserDAO {
     private static final String UPDATE = "UPDATE users SET ?=? WHERE user_id = ?";
     private static final String DELETE = "DELETE FROM users WHERE user_id = ?";
     private static final String LOGIN = "SELECT email FROM users WHERE email = ? AND password = ?";
+    private static final String GET_SESSION_INFO = "SELECT * FROM users WHERE email = ?";
     private static final String SELECT = "SELECT * FROM users";
 
     // Methods from UserDAO
@@ -94,6 +96,44 @@ public class UserController implements UserDAO {
             stmt.close();
             connection.close();
         }
+    }
+
+    @Override
+    public User getUserSessionInfo(String email) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        User user = null;
+
+        try {
+            connection = SQLConnection.getConnection();
+            stmt = connection.prepareStatement(GET_SESSION_INFO);
+            stmt.setString(1, email);
+            resultSet = stmt.executeQuery();
+
+            // If a user is found, create a user object to fill in order confirmation
+            if (resultSet.next()) {
+                user = new User(
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("address"),
+                        resultSet.getString("city"),
+                        resultSet.getString("province"),
+                        resultSet.getString("postal_code"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching user information: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return user;
     }
 
     @Override
