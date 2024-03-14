@@ -4,6 +4,9 @@
     <title>Title</title>
 </head>
 <body>
-<p>You have loggedi n</p>
+<p>You have logged in</p>
+<a href="register.jsp">Register</a>
+<a href="login.jsp">Login</a>
+<a href="products.jsp">Products</a>
 </body>
 </html>
