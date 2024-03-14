@@ -24,6 +24,18 @@ public class User {
         this.password = password;
     }
 
+    // Constructor for a User object on order confirmation page
+    public User(String firstName, String lastName, String address, String city, String province, String postalCode, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.province = province;
+        this.postalCode = postalCode;
+        this.email = email;
+        this.password = password;
+    }
+
     public int getUserId() {
         return userId;
     }
