@@ -18,6 +18,9 @@ public class ProductController implements ProductDAO {
     private static final String SELECT_ALL = "SELECT * FROM products";
     private static final String SELECT_CATEGORY = "SELECT DISTINCT product_category FROM products";
     private static final String SELECT_BY_CATEGORY = "SELECT * FROM products WHERE product_category = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM products WHERE product_id = ?";
+    private static final String SELECT_QTY = "SELECT quantity_in_stock FROM products WHERE product_id = ?";
+    private static final String HANDLE_PRODUCT_SALE = "UPDATE products SET quantity_in_stock = ? WHERE product_id = ?";
 
     // Methods from ProductDAO
     @Override
@@ -51,6 +54,7 @@ public class ProductController implements ProductDAO {
             // Add products to list while there is a 'next product'
             while (resultSet.next()) {
                 products.add(new Product(
+                        resultSet.getInt("product_id"),
                         resultSet.getString("product_name"),
                         resultSet.getString("product_category"),
                         resultSet.getString("product_info"),
@@ -111,6 +115,7 @@ public class ProductController implements ProductDAO {
 
             while (resultSet.next()) {
                 products.add(new Product(
+                        resultSet.getInt("product_id"),
                         resultSet.getString("product_name"),
                         resultSet.getString("product_category"),
                         resultSet.getString("product_info"),
@@ -126,5 +131,78 @@ public class ProductController implements ProductDAO {
             if (connection != null) connection.close();
         }
         return products;
+    }
+
+    @Override
+    public void handleSale(int productId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmtSelect = null;
+        PreparedStatement stmtUpdate = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = SQLConnection.getConnection();
+            stmtSelect = connection.prepareStatement(SELECT_QTY);
+            stmtSelect.setInt(1, productId);
+            resultSet = stmtSelect.executeQuery();
+
+            if (resultSet.next()) {
+                int currentQty = resultSet.getInt("quantity_in_stock");
+                if (currentQty > 0) {
+                    stmtUpdate = connection.prepareStatement(HANDLE_PRODUCT_SALE);
+                    stmtUpdate.setInt(1, currentQty - 1);
+                    stmtUpdate.setInt(2, productId);
+                    stmtUpdate.executeUpdate();
+                } else {
+                    // If there isn't enough stock
+                    throw new RuntimeException("No stock for product id #" + productId);
+                }
+            } else {
+                // If there is no product id found
+                throw new RuntimeException("Product with id #" + productId + " not found in the database");
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (stmtSelect != null) stmtSelect.close();
+            if (stmtUpdate != null) stmtUpdate.close();
+            if (connection != null) connection.close();
+        }
+    }
+
+    @Override
+    public Product selectById(int productId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = SQLConnection.getConnection();
+            stmt = connection.prepareStatement(SELECT_BY_ID);
+            stmt.setInt(1, productId);
+            resultSet = stmt.executeQuery();
+
+            // If a product object exists, map the attributes
+            if (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("product_id"));
+                product.setProductName(resultSet.getString("product_name"));
+                product.setProductCategory(resultSet.getString("product_category"));
+                product.setProductInfo(resultSet.getString("product_info"));
+                product.setQuantityInStock(resultSet.getInt("quantity_in_stock"));
+                product.setProductImage(resultSet.getString("product_image"));
+                return product;
+            } else {
+                // If no productId found
+                return null;
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
     }
 }
