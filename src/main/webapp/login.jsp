@@ -8,12 +8,11 @@
   <title>Login</title>
 </head>
 <body>
-<%-- REGISTRATION FORM --%>
 <form id="form-container" action="${pageContext.request.contextPath}/login" method="post">
   <input type="text" id="email" name="email" placeholder="Email" required>
   <label for="password"></label>
   <input type="password" id="password" name="password" placeholder="Password" required>
-  <button type="submit">Register</button>
+  <button type="submit">Login</button>
 </form>
 </body>
 </html>
