@@ -4,6 +4,10 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 
+    <welcome-file-list>
+        <welcome-file>products.jsp</welcome-file>
+    </welcome-file-list>
+
     <servlet>
         <servlet-name>RegistrationServlet</servlet-name>
         <servlet-class>com.oms.webda2.RegistrationServlet</servlet-class>
@@ -29,6 +33,25 @@
     <servlet-mapping>
         <servlet-name>ProductServlet</servlet-name>
         <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>com.oms.webda2.OrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/orderpage</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>ReviewServlet</servlet-name>
+        <servlet-class>com.oms.webda2.ReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReviewServlet</servlet-name>
+        <url-pattern>/writereview</url-pattern>
+        <url-pattern>/productreview</url-pattern>
     </servlet-mapping>
 
 </web-app>
