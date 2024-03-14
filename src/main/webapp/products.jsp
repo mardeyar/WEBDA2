@@ -13,9 +13,14 @@
     <title>Products</title>
 </head>
 <body>
-    <h1>Browse our selection</h1>
 
     <div class="container">
+        <div class="container-header">
+            <h1>Browse our selections</h1>
+            <a href="register.jsp">Register</a>
+            <a href="login.jsp">Login</a>
+        </div>
+
         <%-- Dropdown list to select categories dynamically --%>
         <select id="category" onchange="filterProduct()">
             <option>Select Category</option>
@@ -38,7 +43,9 @@
             %>
         </select>
 
+        <%-- Determine if the user is logged in, set a bool --%>
         <%
+            Boolean isLoggedIn = (session.getAttribute("user") != null); // If "user" is not null, user is logged in
             ProductController pc = new ProductController();
             List<Product> products;
             String categoryFilter = request.getParameter("category");
@@ -67,7 +74,10 @@
                 <p><%= product.getProductCategory()%></p>
                 <p><%= product.getProductInfo()%></p>
                 <p><%= product.getQuantityInStock()%> in stock</p>
+                <a href="<%= isLoggedIn ? "orderpage.jsp?productId=" + product.getProductId() : "login.jsp" %>">Add to cart</a>
             </div>
+            <a href="productreview.jsp?productId=<%= product.getProductId() %>">Product Reviews</a>
+            <a href="writereview.jsp?productId=<%= product.getProductId() %>">Write Review</a>
         </div>
         <%
                 }
