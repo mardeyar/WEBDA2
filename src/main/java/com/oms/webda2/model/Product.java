@@ -1,6 +1,7 @@
 package com.oms.webda2.model;
 
 public class Product {
+    private int productId;
     private String productName;
     private String productCategory;
     private String productInfo;
@@ -9,12 +10,21 @@ public class Product {
 
     public Product() { }
 
-    public Product(String productName, String productCategory, String productInfo, int quantityInStock, String productImage) {
+    public Product(int productId, String productName, String productCategory, String productInfo, int quantityInStock, String productImage) {
+        this.productId = productId;
         this.productName = productName;
         this.productCategory = productCategory;
         this.productInfo = productInfo;
         this.quantityInStock = quantityInStock;
         this.productImage = productImage;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
