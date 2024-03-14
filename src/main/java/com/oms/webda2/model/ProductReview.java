@@ -8,8 +8,7 @@ public class ProductReview {
 
     public ProductReview() { }
 
-    public ProductReview(int reviewId, int productId, String reviewInfo, int rating) {
-        this.reviewId = reviewId;
+    public ProductReview(int productId, String reviewInfo, int rating) {
         this.productId = productId;
         this.reviewInfo = reviewInfo;
         this.rating = rating;
