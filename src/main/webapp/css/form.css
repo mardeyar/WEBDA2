@@ -1,10 +1,91 @@
-body {
-    background-color: aqua;
-}
-
 #form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #dbdde0;
+    width: 500px;
+    margin: 100px auto;
+    box-shadow: 0px 6px 6px -1px rgba(161,161,161,1);
+    border: 1px solid #b4afaf;
+}
+
+#form-container-header {
+    display: flex;
+    flex-direction: row;
+}
+
+#profile-icon {
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+    padding-top: 10px;
+}
+
+#form-container-header-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: lighter;
+    font-size: 22px;
+    color: #1f1f1f;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+#form-container-header-title::before,
+#form-container-header-title::after {
+    display: inline-block;
+    content: "";
+    border-top: 1px solid #575757;
+    width: 6rem;
+    margin: 0 1rem;
+    transform: translateY(-.3rem);
+}
+
+#error-msg {
+    color: #fc2413;
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 14px;
+    font-weight: lighter;
+    margin-top: 0;
+}
+
+input {
+    padding: 10px 20px;
+    font-family: 'Century Gothic', sans-serif;
+    width: 300px;
+    margin: 5px;
+    border-radius: 25px;
+    border: 1px solid #9b9b9b;
+    color: #1f1f1f;
+}
+
+#btn {
+    padding: 10px;
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    width: 325px;
+    margin: 15px;
+    border-radius: 25px;
+    border: 1px solid #9b9b9b;
+    background-color: #589d45;
+    color: #1f1f1f;
+    box-shadow: 0px 2px 6px -1px rgb(31, 31, 31);
+}
+
+#btn:hover {
+    cursor: pointer;
+}
+
+#reg-link {
+    font-family: 'Century Gothic', sans-serif;
+    font-weight: lighter;
+    font-size: 14px;
+    color: #1f1f1f;
+    margin-bottom: 40px;
+}
+
+#reg-link a {
+    text-decoration: none;
+    color: #2e697a;
 }
