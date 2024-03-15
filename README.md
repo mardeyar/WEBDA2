@@ -80,3 +80,7 @@ VALUES
 ## Requirements
 - [XAMPP Control Panel](https://www.apachefriends.org/download.html)
 - IDE Software: I used [IntelliJ](https://www.jetbrains.com/idea/download/?section=windows)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
