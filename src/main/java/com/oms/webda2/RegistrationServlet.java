@@ -1,5 +1,6 @@
 package com.oms.webda2;
 
+import jakarta.servlet.RequestDispatcher;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.oms.webda2.DAO.UserDAO;
@@ -24,7 +25,7 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserDAO userDAO = new UserController();
 
         try {
@@ -37,7 +38,7 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String path = request.getServletPath();
         if (path.equals("/registration")) {
             registerUser(request, response);
@@ -46,7 +47,7 @@ public class RegistrationServlet extends HttpServlet {
         }
     }
 
-    public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void registerUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String address = request.getParameter("address");
@@ -55,8 +56,25 @@ public class RegistrationServlet extends HttpServlet {
         String postalCode = request.getParameter("postalCode");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
 
         try {
+            // Check for duplicate email
+            if (user.emailExists(email)) {
+                request.setAttribute("duplicateEmail", true);
+                RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // Check for password mismatch
+            if (!password.equals(confirmPassword)) {
+                request.setAttribute("passwordMismatch", true);
+                RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
             // Hash password before sending to the DB
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
@@ -74,6 +92,6 @@ public class RegistrationServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("products.jsp");
     }
 }
