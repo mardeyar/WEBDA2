@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String path = request.getServletPath();
         if (path.equals("/login")) {
             loginUser(request, response);
@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    public void loginUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void loginUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -65,7 +65,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect(redirectURL);
                 } else {
                     // If no specific redirectURL, redirect to homepage
-                    response.sendRedirect("homepage.jsp");
+                    response.sendRedirect("products.jsp");
                 }
                 return;
             }
@@ -73,7 +73,8 @@ public class LoginServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // Lastly, if login fails, redirect to index
-        response.sendRedirect("index.jsp");
+        // Lastly, if login fails, stay on login page
+        request.setAttribute("loginFailed", true);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }
