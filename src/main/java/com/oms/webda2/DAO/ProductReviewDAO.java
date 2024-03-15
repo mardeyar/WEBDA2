@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface ProductReviewDAO {
     void insert(ProductReview productReview) throws SQLException;
-    void update(ProductReview productReview) throws SQLException;
-    void delete(int productReviewId) throws SQLException;
     List<ProductReview> select(int productId) throws SQLException;
 }

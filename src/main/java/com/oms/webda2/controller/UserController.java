@@ -14,11 +14,8 @@ import java.util.List;
 
 public class UserController implements UserDAO {
     private static final String INSERT = "INSERT INTO users(first_name, last_name, address, city, province, postal_code, email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE users SET ?=? WHERE user_id = ?";
-    private static final String DELETE = "DELETE FROM users WHERE user_id = ?";
-    private static final String LOGIN = "SELECT email FROM users WHERE email = ? AND password = ?";
     private static final String GET_SESSION_INFO = "SELECT * FROM users WHERE email = ?";
-    private static final String SELECT = "SELECT * FROM users";
+    private static final String CHECK_EXISTING_EMAIL = "SELECT COUNT(*) FROM users WHERE email = ?";
 
     // Methods from UserDAO
     @Override
@@ -44,54 +41,6 @@ public class UserController implements UserDAO {
             System.err.println("SQL syntax error: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Caught exception: " + e.getMessage());
-        } finally {
-            stmt.close();
-            connection.close();
-        }
-    }
-
-    @Override
-    public void update(User user) throws SQLException {
-
-    }
-
-    @Override
-    public void delete(int userId) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(DELETE);
-            preparedStatement.setInt(1, userId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("SQL syntax error: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } finally {
-            preparedStatement.close();
-            connection.close();
-        }
-    }
-
-    @Override
-    public boolean login(String email, String password) throws SQLException {
-        Connection connection = null;
-        PreparedStatement stmt = null;
-
-        try {
-            connection = getConnection();
-            stmt = connection.prepareStatement(LOGIN);
-
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-            return rs.next();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;
         } finally {
             stmt.close();
             connection.close();
@@ -140,5 +89,28 @@ public class UserController implements UserDAO {
     public List<User> select() throws SQLException {
         List<User> users = new ArrayList<>();
         return users;
+    }
+
+    @Override
+    public boolean emailExists(String email) throws SQLException {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = getConnection();
+            stmt = connection.prepareStatement(CHECK_EXISTING_EMAIL);
+            stmt.setString(1, email);
+            resultSet = stmt.executeQuery();
+            resultSet.next();
+            int emailCount = resultSet.getInt(1);
+            return emailCount > 0;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
     }
 }

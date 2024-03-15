@@ -12,32 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductController implements ProductDAO {
-    private static final String INSERT = "INSERT INTO products(product_name, product_category, product_info, quantity_in_stock, product_image) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE products SET ? = ? WHERE ? = ?";
-    private static final String DELETE = "DELETE FROM products WHERE product_id = ?";
     private static final String SELECT_ALL = "SELECT * FROM products";
     private static final String SELECT_CATEGORY = "SELECT DISTINCT product_category FROM products";
     private static final String SELECT_BY_CATEGORY = "SELECT * FROM products WHERE product_category = ?";
-    private static final String SELECT_BY_ID = "SELECT * FROM products WHERE product_id = ?";
     private static final String SELECT_QTY = "SELECT quantity_in_stock FROM products WHERE product_id = ?";
     private static final String HANDLE_PRODUCT_SALE = "UPDATE products SET quantity_in_stock = ? WHERE product_id = ?";
 
     // Methods from ProductDAO
-    @Override
-    public void insert(Product product) throws SQLException {
-
-    }
-
-    @Override
-    public void update(Product product) throws SQLException {
-
-    }
-
-    @Override
-    public void delete(int productId) throws SQLException {
-
-    }
-
     @Override
     public List<Product> select() throws SQLException {
         Connection connection = null;
@@ -167,41 +148,6 @@ public class ProductController implements ProductDAO {
             if (resultSet != null) resultSet.close();
             if (stmtSelect != null) stmtSelect.close();
             if (stmtUpdate != null) stmtUpdate.close();
-            if (connection != null) connection.close();
-        }
-    }
-
-    @Override
-    public Product selectById(int productId) throws SQLException {
-        Connection connection = null;
-        PreparedStatement stmt = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = SQLConnection.getConnection();
-            stmt = connection.prepareStatement(SELECT_BY_ID);
-            stmt.setInt(1, productId);
-            resultSet = stmt.executeQuery();
-
-            // If a product object exists, map the attributes
-            if (resultSet.next()) {
-                Product product = new Product();
-                product.setProductId(resultSet.getInt("product_id"));
-                product.setProductName(resultSet.getString("product_name"));
-                product.setProductCategory(resultSet.getString("product_category"));
-                product.setProductInfo(resultSet.getString("product_info"));
-                product.setQuantityInStock(resultSet.getInt("quantity_in_stock"));
-                product.setProductImage(resultSet.getString("product_image"));
-                return product;
-            } else {
-                // If no productId found
-                return null;
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (resultSet != null) resultSet.close();
-            if (stmt != null) stmt.close();
             if (connection != null) connection.close();
         }
     }
